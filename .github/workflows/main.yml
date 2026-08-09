@@ -20,10 +20,8 @@ jobs:
           # optionals
           build-cmd: flutter build apk --release
           working-directory: ./launcher/
-          
-      - name: Archive APK
-        uses: actions/upload-artifact@v2
+
+      - name: ReleaseMe - GitHub Release Management
+        uses: dev-build-deploy/release-me@v0.18.2
         with:
-          name: launcher
-          # Try running the build locally with the build command to be sure of this path
-          path: build/app/outputs/flutter-apk/app-release.apk
+          files: ./launcer/build/app/outputs/flutter-apk/app-release.apk
