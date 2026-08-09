@@ -25,3 +25,4 @@ jobs:
         uses: dev-build-deploy/release-me@v0.18.2
         with:
           files: ./launcer/build/app/outputs/flutter-apk/app-release.apk
+          token: ${{ github.token }}
