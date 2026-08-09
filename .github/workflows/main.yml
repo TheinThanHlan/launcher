@@ -25,10 +25,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - run: flutter pub get
-      - run: flutter --version
 
-      
   build_androidApk:
     name: Build Flutter App (Android)
     needs: [flutter_test]
@@ -48,16 +45,12 @@ jobs:
       - run: flutter pub get
       - run: flutter clean
       - run: flutter build apk --release
-     
-      - uses: actions/create-release@v1
+      - name: Create release
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --generate-notes
