@@ -12,6 +12,9 @@ class SelectApp extends StatelessWidget implements WinterView {
   final SelectAppModel _model;
   SelectApp(this._lf, this._model);
   bool selectAll = false;
+
+  late final Function() reloadApps;
+
   @override
   Widget build(BuildContext context) {
     //    return LayoutBuilder(builder: (context, constraints) {
@@ -30,8 +33,17 @@ class SelectApp extends StatelessWidget implements WinterView {
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 13),
                     child: ElevatedButton(
                       onPressed: () {
+                        reloadApps();
+                      },
+                      child: Text("Reload Apps"),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsGeometry.symmetric(horizontal: 13),
+                    child: ElevatedButton(
+                      onPressed: () {
                         _model.onActionClicked(_model.selectedApps);
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                       },
                       child: Text(_model.actionButtonTitle),
                     ),

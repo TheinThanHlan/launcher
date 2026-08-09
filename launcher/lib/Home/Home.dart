@@ -46,7 +46,7 @@ class Home extends StatelessWidget implements WinterView {
                       bottom: 55,
                     ),
                     child: GridView.count(
-                      crossAxisCount: 3,
+                      crossAxisCount: 4,
                       mainAxisSpacing: 21,
                       crossAxisSpacing: 21,
                       children: [
