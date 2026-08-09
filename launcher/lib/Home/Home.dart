@@ -45,76 +45,78 @@ class Home extends StatelessWidget implements WinterView {
                       top: 55,
                       bottom: 55,
                     ),
-                    child: SingleChildScrollView(
-                      child: Wrap(
-                        spacing: 55,
-                        runSpacing: 55,
-                        runAlignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      getIt<SelectAppController>(
-                                        param1: SelectAppModel(
-                                          selectedApps: snapshot.data!,
-                                          pageTitle: "App To Show",
-                                          actionButtonTitle: "Change",
-                                          onActionClicked: (a) {
-                                            getIt<SelectedAppsDao>()
-                                                .updateShowApps(a)
-                                                .then((x) {
-                                                  setState(() {});
-                                                });
-                                          },
-                                        ),
-                                      ).getView(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: 89,
-                              child: Column(
-                                children: [
-                                  Icon(Icons.apps, size: 55),
-                                  Text("Settings"),
-                                ],
+                    child: GridView.count(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 13,
+                      crossAxisSpacing: 13,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    getIt<SelectAppController>(
+                                      param1: SelectAppModel(
+                                        selectedApps: snapshot.data!,
+                                        pageTitle: "App To Show",
+                                        actionButtonTitle: "Change",
+                                        onActionClicked: (a) {
+                                          getIt<SelectedAppsDao>()
+                                              .updateShowApps(a)
+                                              .then((x) {
+                                                setState(() {});
+                                              });
+                                        },
+                                      ),
+                                    ).getView(),
                               ),
+                            );
+                          },
+                          child: Container(
+                            width: 89,
+                            height: 89,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.apps, size: 55),
+                                Text("Settings"),
+                              ],
                             ),
                           ),
-                          for (var a in value)
-                            if (snapshot.data!.apps.contains(a.packageName))
-                              InkWell(
-                                onTap: () {
-                                  if (a.packageName != null) {
-                                    FlutterDeviceApps.openApp(a.packageName!);
-                                  }
-                                },
-                                child: Container(
-                                  width: 89,
-                                  height: 89,
-                                  child: Column(
-                                    spacing: 13,
-                                    children: [
-                                      Image.memory(
-                                        a.iconBytes ?? Uint8List(0),
-                                        fit: BoxFit.fitHeight,
-                                        height: 55,
-                                      ),
-                                      Text(
-                                        "${a.appName}",
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
+                        ),
+                        for (var a in value)
+                          if (snapshot.data!.apps.contains(a.packageName))
+                            InkWell(
+                              onTap: () {
+                                if (a.packageName != null) {
+                                  FlutterDeviceApps.openApp(a.packageName!);
+                                }
+                              },
+                              child: Container(
+                                width: 89,
+                                height: 89,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  spacing: 13,
+                                  children: [
+                                    Image.memory(
+                                      a.iconBytes ?? Uint8List(0),
+                                      fit: BoxFit.fitHeight,
+                                      height: 55,
+                                    ),
+                                    Text(
+                                      "${a.appName}",
+                                      softWrap: true,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
                               ),
-                        ],
-                      ),
+                            ),
+                      ],
                     ),
                   );
                 }
