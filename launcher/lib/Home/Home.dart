@@ -47,11 +47,8 @@ class Home extends StatelessWidget implements WinterView {
                       crossAxisCount:
                           ((MediaQuery.of(context).size.width / 144) * 1.618)
                               .toInt(),
-                      mainAxisSpacing: 5,
                       semanticChildCount: snapshot.data!.apps.length,
-                      crossAxisSpacing: 8,
-                      childAspectRatio: 3 / 5,
-                      shrinkWrap: false,
+                      childAspectRatio: 0.9,
                       children: [
                         InkWell(
                           onTap: () {
@@ -75,9 +72,11 @@ class Home extends StatelessWidget implements WinterView {
                               ),
                             );
                           },
+
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 13,
                             children: [
                               CircleAvatar(child: Icon(Icons.apps), radius: 21),
                               Text(
@@ -85,6 +84,7 @@ class Home extends StatelessWidget implements WinterView {
                                 maxLines: 2,
                                 softWrap: true,
                                 overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
@@ -98,8 +98,8 @@ class Home extends StatelessWidget implements WinterView {
                                 }
                               },
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 spacing: 8,
                                 children: [
                                   CircleAvatar(
@@ -113,6 +113,7 @@ class Home extends StatelessWidget implements WinterView {
                                     maxLines: 2,
                                     softWrap: true,
                                     overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
                                   ),
                                 ],
                               ),
