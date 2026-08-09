@@ -11,8 +11,7 @@ class SelectApp extends StatelessWidget implements WinterView {
   final WinterLanguageFactory _lf;
   final SelectAppModel _model;
   SelectApp(this._lf, this._model);
-  bool selectAll = false;
-
+  late final bool Function() isAllSelected;
   late final Function() reloadApps;
 
   @override
@@ -28,77 +27,80 @@ class SelectApp extends StatelessWidget implements WinterView {
             return Scaffold(
               appBar: AppBar(
                 title: Text(_model.pageTitle),
+                actionsPadding: EdgeInsetsGeometry.symmetric(horizontal: 21),
                 actions: [
-                  Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 13),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        reloadApps();
-                      },
-                      child: Text("Reload Apps"),
-                    ),
+                  ElevatedButton(
+                    onPressed: () {
+                      reloadApps();
+                    },
+                    child: Text("Reload Apps"),
                   ),
+
                   Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 13),
+                    padding: EdgeInsetsGeometry.symmetric(horizontal: 21),
                     child: ElevatedButton(
                       onPressed: () {
-                        _model.onActionClicked(_model.selectedApps);
+                        _model.onActionClicked(_model.editSelectedApps);
                         Navigator.pop(context);
                       },
                       child: Text(_model.actionButtonTitle),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 21),
-                    child: Checkbox(
-                      value: selectAll,
-                      onChanged: (a) {
-                        selectAll = a!;
-                        if (a ?? false) {
-                          this._model.selectedApps.apps = value.map((b) {
-                            return b.packageName.toString();
-                          }).toList();
-                        } else {
-                          this._model.selectedApps.apps = [];
-                        }
-                        setState(() {});
-                      },
-                    ),
+                  Checkbox(
+                    value: isAllSelected(),
+                    onChanged: (a) {
+                      if (a ?? false) {
+                        _model.editSelectedApps.apps = value.map((b) {
+                          return b.packageName.toString();
+                        }).toList();
+                      } else {
+                        _model.editSelectedApps.apps = [];
+                      }
+                      setState(() {});
+                    },
                   ),
                 ],
               ),
-              body: ListView(
-                children: [
-                  for (var a in value)
-                    CheckboxListTile(
-                      //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
-                      title: Row(
-                        spacing: 55,
-                        children: [
-                          Image.memory(
-                            a.iconBytes ?? Uint8List(1),
-                            width: 55,
-                            fit: BoxFit.contain,
-                          ),
-                          Text(a.appName.toString()),
-                        ],
+              body: Padding(
+                padding: EdgeInsetsGeometry.symmetric(vertical: 13),
+                child: ListView(
+                  children: [
+                    for (var a in value)
+                      CheckboxListTile(
+                        //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
+                        title: Row(
+                          spacing: 34,
+                          children: [
+                            Image.memory(
+                              a.iconBytes ?? Uint8List(1),
+                              width: 55,
+                              fit: BoxFit.contain,
+                            ),
+                            Expanded(
+                              child: Text(
+                                a.appName.toString(),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        value: _model.editSelectedApps.apps.contains(
+                          a.packageName.toString(),
+                        ),
+                        onChanged: (aa) {
+                          // print(_model.editSelectedApps.apps.toString());
+                          if (aa ?? false) {
+                            _model.editSelectedApps.apps.add(
+                              a.packageName.toString(),
+                            );
+                          } else {
+                            _model.editSelectedApps.apps.remove(a.packageName);
+                          }
+                          setState(() {});
+                        },
                       ),
-                      value: _model.selectedApps.apps.contains(
-                        a.packageName.toString(),
-                      ),
-                      onChanged: (aa) {
-                        // print(_model.selectedApps.apps.toString());
-                        if (aa ?? false) {
-                          _model.selectedApps.apps.add(
-                            a.packageName.toString(),
-                          );
-                        } else {
-                          _model.selectedApps.apps.remove(a.packageName);
-                        }
-                        setState(() {});
-                      },
-                    ),
-                ],
+                  ],
+                ),
               ),
             );
           },

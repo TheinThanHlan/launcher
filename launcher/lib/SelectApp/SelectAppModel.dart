@@ -7,7 +7,7 @@ class SelectAppModel implements WinterModel {
   final SelectedApps selectedApps;
   final String pageTitle;
   final String actionButtonTitle;
-
+  final SelectedApps editSelectedApps = SelectedApps([]);
   final void Function(SelectedApps selectedApps) onActionClicked;
 
   SelectAppModel({
@@ -15,5 +15,7 @@ class SelectAppModel implements WinterModel {
     required this.actionButtonTitle,
     required this.onActionClicked,
     required this.selectedApps,
-  });
+  }) {
+    editSelectedApps.apps = [...this.selectedApps.apps];
+  }
 }

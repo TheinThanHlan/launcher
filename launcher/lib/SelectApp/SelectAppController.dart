@@ -12,6 +12,7 @@ class SelectAppController implements WinterController {
   //final module = getIt<GetIt>(instanceName:);
   SelectAppController(this._view, this._lf, this._model) {
     _view.reloadApps = reloadApps;
+    _view.isAllSelected = isAllSelected;
   }
   //this._view.c=this;
   void reset() {}
@@ -25,7 +26,16 @@ class SelectAppController implements WinterController {
       includeSystem: true,
       includeIcons: true,
     );
-    apps.sort((x, y) => x.appName.toString().compareTo(x.appName.toString()));
+    apps.sort((x, y) => x.appName.toString().compareTo(y.appName.toString()));
     getIt<ValueNotifier<List<AppInfo>>>().value = apps;
+  }
+
+  bool isAllSelected() {
+    for (var a in getIt<ValueNotifier<List<AppInfo>>>().value) {
+      if (!_model.editSelectedApps.apps.contains(a.packageName.toString())) {
+        return false;
+      }
+    }
+    return true;
   }
 }

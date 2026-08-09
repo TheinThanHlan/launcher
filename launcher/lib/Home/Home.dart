@@ -39,16 +39,19 @@ class Home extends StatelessWidget implements WinterView {
                 //
                 if (snapshot.data != null) {
                   return Padding(
-                    padding: EdgeInsetsGeometry.only(
-                      left: 55,
-                      right: 55,
-                      top: 55,
-                      bottom: 55,
+                    padding: EdgeInsetsGeometry.symmetric(
+                      horizontal: 13,
+                      vertical: 21,
                     ),
                     child: GridView.count(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 21,
-                      crossAxisSpacing: 21,
+                      crossAxisCount:
+                          ((MediaQuery.of(context).size.width / 144) * 1.618)
+                              .toInt(),
+                      mainAxisSpacing: 5,
+                      semanticChildCount: snapshot.data!.apps.length,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 3 / 5,
+                      shrinkWrap: false,
                       children: [
                         InkWell(
                           onTap: () {
@@ -72,22 +75,18 @@ class Home extends StatelessWidget implements WinterView {
                               ),
                             );
                           },
-                          child: Container(
-                            width: 89,
-                            height: 89,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.apps, size: 55),
-                                Text(
-                                  "Show App Chooser",
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(child: Icon(Icons.apps), radius: 21),
+                              Text(
+                                "Show App Chooser",
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
                         ),
                         for (var a in value)
@@ -98,27 +97,24 @@ class Home extends StatelessWidget implements WinterView {
                                   FlutterDeviceApps.openApp(a.packageName!);
                                 }
                               },
-                              child: Container(
-                                width: 89,
-                                height: 89,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  spacing: 13,
-                                  children: [
-                                    Image.memory(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 8,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 21,
+                                    child: Image.memory(
                                       a.iconBytes ?? Uint8List(0),
-                                      fit: BoxFit.fitHeight,
-                                      height: 55,
                                     ),
-                                    Text(
-                                      "${a.appName}",
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  Text(
+                                    "${a.appName}",
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
                             ),
                       ],
