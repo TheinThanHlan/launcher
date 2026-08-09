@@ -47,8 +47,8 @@ class Home extends StatelessWidget implements WinterView {
                     ),
                     child: GridView.count(
                       crossAxisCount: 3,
-                      mainAxisSpacing: 13,
-                      crossAxisSpacing: 13,
+                      mainAxisSpacing: 21,
+                      crossAxisSpacing: 21,
                       children: [
                         InkWell(
                           onTap: () {
@@ -58,7 +58,7 @@ class Home extends StatelessWidget implements WinterView {
                                     getIt<SelectAppController>(
                                       param1: SelectAppModel(
                                         selectedApps: snapshot.data!,
-                                        pageTitle: "App To Show",
+                                        pageTitle: "Show App Chooser",
                                         actionButtonTitle: "Change",
                                         onActionClicked: (a) {
                                           getIt<SelectedAppsDao>()
@@ -80,7 +80,12 @@ class Home extends StatelessWidget implements WinterView {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.apps, size: 55),
-                                Text("Settings"),
+                                Text(
+                                  "Show App Chooser",
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ],
                             ),
                           ),
@@ -108,8 +113,8 @@ class Home extends StatelessWidget implements WinterView {
                                     ),
                                     Text(
                                       "${a.appName}",
-                                      softWrap: true,
                                       maxLines: 2,
+                                      softWrap: true,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
