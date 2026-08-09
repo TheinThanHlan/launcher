@@ -1,0 +1,10 @@
+--This is the database schema example
+--you must split each database schemas as described below
+
+
+create database Example1(id Number,name String);
+--following is the splitter defined by the winter framework
+--#-#
+create database Example2(id Number,name String);
+--#-#
+create database Example3(id Number,name String);

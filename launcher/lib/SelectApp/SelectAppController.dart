@@ -1,0 +1,17 @@
+import 'SelectAppModel.dart';
+import 'SelectApp.dart';
+import 'package:winter/winter.dart';
+
+class SelectAppController implements WinterController {
+  final SelectAppModel _model;
+  final SelectApp _view;
+  final WinterLanguageFactory _lf;
+  //final module = getIt<GetIt>(instanceName:);
+  SelectAppController(this._view, this._lf, this._model);
+  //this._view.c=this;
+  void reset() {}
+
+  WinterView getView() {
+    return this._view;
+  }
+}
