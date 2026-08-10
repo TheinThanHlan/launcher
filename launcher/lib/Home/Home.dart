@@ -111,6 +111,7 @@ class Home extends StatelessWidget implements WinterView {
                                           );
                                           await getIt<SelectedAppsDao>()
                                               .updateShowApps(tmpAa);
+
                                           for (var b in a.apps) {
                                             await InstalledApps.uninstallApp(b);
                                           }
