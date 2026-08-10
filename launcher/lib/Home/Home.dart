@@ -1,12 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_device_apps/flutter_device_apps.dart';
-import 'package:launcher/SelectApp/SelectApp.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'package:launcher/SelectApp/SelectAppController.dart';
 import 'package:launcher/SelectApp/SelectAppModel.dart';
 import 'package:launcher/data/dao/SelectedAppsDao.dart';
-import 'package:launcher/data/model/AppInfoExtension.dart';
 import 'package:launcher/data/model/SelectedApps.dart';
 import 'package:winter/winter.dart';
 import "HomeModel.dart";
@@ -57,6 +56,8 @@ class Home extends StatelessWidget implements WinterView {
                                 builder: (context) =>
                                     getIt<SelectAppController>(
                                       param1: SelectAppModel(
+                                        includeSystemApps: true,
+                                        onlyLaunchable: true,
                                         selectedApps: snapshot.data!,
                                         pageTitle: "Show App Chooser",
                                         actionButtonTitle: "Change",
@@ -72,15 +73,62 @@ class Home extends StatelessWidget implements WinterView {
                               ),
                             );
                           },
-
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             spacing: 13,
                             children: [
-                              CircleAvatar(child: Icon(Icons.apps), radius: 21),
+                              CircleAvatar(radius: 21, child: Icon(Icons.apps)),
                               Text(
                                 "Show App Chooser",
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    getIt<SelectAppController>(
+                                      param1: SelectAppModel(
+                                        selectedApps: SelectedApps([]),
+                                        includeSystemApps: false,
+                                        onlyLaunchable: false,
+                                        pageTitle: "Delete Apps",
+                                        actionButtonTitle: "Delete",
+                                        onActionClicked: (a) async {
+                                          var tmpAa = SelectedApps(
+                                            snapshot.data!.apps
+                                                .where(
+                                                  (b) => !a.apps.contains(b),
+                                                )
+                                                .toList(),
+                                          );
+                                          await getIt<SelectedAppsDao>()
+                                              .updateShowApps(tmpAa);
+                                          for (var b in a.apps) {
+                                            await InstalledApps.uninstallApp(b);
+                                          }
+                                          setState(() {});
+                                        },
+                                      ),
+                                    ).getView(),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            spacing: 13,
+                            children: [
+                              CircleAvatar(radius: 21, child: Icon(Icons.apps)),
+                              Text(
+                                "Delete Apps",
                                 maxLines: 2,
                                 softWrap: true,
                                 overflow: TextOverflow.ellipsis,
@@ -93,9 +141,7 @@ class Home extends StatelessWidget implements WinterView {
                           if (snapshot.data!.apps.contains(a.packageName))
                             InkWell(
                               onTap: () {
-                                if (a.packageName != null) {
-                                  FlutterDeviceApps.openApp(a.packageName!);
-                                }
+                                InstalledApps.startApp(a.packageName);
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -104,12 +150,10 @@ class Home extends StatelessWidget implements WinterView {
                                 children: [
                                   CircleAvatar(
                                     radius: 21,
-                                    child: Image.memory(
-                                      a.iconBytes ?? Uint8List(0),
-                                    ),
+                                    child: Image.memory(a.icon ?? Uint8List(0)),
                                   ),
                                   Text(
-                                    "${a.appName}",
+                                    a.name,
                                     maxLines: 2,
                                     softWrap: true,
                                     overflow: TextOverflow.ellipsis,

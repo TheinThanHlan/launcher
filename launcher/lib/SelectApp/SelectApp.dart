@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_device_apps/flutter_device_apps.dart';
-import 'package:launcher/data/dao/SelectedAppsDao.dart';
-import 'package:launcher/data/model/SelectedApps.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:installed_apps/installed_apps.dart';
+import 'package:launcher/data/service/AppInfoService.dart';
 import 'package:winter/winter.dart';
 import "SelectAppModel.dart";
 
@@ -11,8 +11,7 @@ class SelectApp extends StatelessWidget implements WinterView {
   final WinterLanguageFactory _lf;
   final SelectAppModel _model;
   SelectApp(this._lf, this._model);
-  late final bool Function() isAllSelected;
-  late final Function() reloadApps;
+  late final bool Function(List<AppInfo>) isAllSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +21,19 @@ class SelectApp extends StatelessWidget implements WinterView {
     return ValueListenableBuilder(
       valueListenable: getIt<ValueNotifier<List<AppInfo>>>(),
       builder: (builder, value, child) {
+        //filter the system apps and launchable apps.
+        var filteredValue = value;
+        if (!_model.includeSystemApps) {
+          filteredValue = filteredValue
+              .where((a) => a.isSystemApp != true)
+              .toList();
+        }
+        if (_model.onlyLaunchable) {
+          filteredValue = filteredValue
+              .where((a) => a.isLaunchableApp == true)
+              .toList();
+        }
+
         return StatefulBuilder(
           builder: (context, setState) {
             return Scaffold(
@@ -31,7 +43,7 @@ class SelectApp extends StatelessWidget implements WinterView {
                 actions: [
                   ElevatedButton(
                     onPressed: () {
-                      reloadApps();
+                      getIt<AppInfoService>().updateAppInfosNotifier();
                     },
                     child: Text("Reload Apps"),
                   ),
@@ -41,17 +53,18 @@ class SelectApp extends StatelessWidget implements WinterView {
                     child: ElevatedButton(
                       onPressed: () {
                         _model.onActionClicked(_model.editSelectedApps);
+
                         Navigator.pop(context);
                       },
                       child: Text(_model.actionButtonTitle),
                     ),
                   ),
                   Checkbox(
-                    value: isAllSelected(),
+                    value: isAllSelected(filteredValue),
                     onChanged: (a) {
                       if (a ?? false) {
-                        _model.editSelectedApps.apps = value.map((b) {
-                          return b.packageName.toString();
+                        _model.editSelectedApps.apps = filteredValue.map((b) {
+                          return b.packageName;
                         }).toList();
                       } else {
                         _model.editSelectedApps.apps = [];
@@ -65,20 +78,26 @@ class SelectApp extends StatelessWidget implements WinterView {
                 padding: EdgeInsetsGeometry.symmetric(vertical: 13),
                 child: ListView(
                   children: [
-                    for (var a in value)
+                    for (var a in filteredValue)
                       CheckboxListTile(
                         //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
                         title: Row(
                           spacing: 34,
                           children: [
-                            Image.memory(
-                              a.iconBytes ?? Uint8List(1),
-                              width: 55,
-                              fit: BoxFit.contain,
+                            IconButton(
+                              onPressed: () {},
+                              icon: Image.memory(
+                                a.icon ?? Uint8List(1),
+                                width: 55,
+                                fit: BoxFit.contain,
+                              ),
+                              onLongPress: () {
+                                InstalledApps.startApp(a.packageName);
+                              },
                             ),
                             Expanded(
                               child: Text(
-                                a.appName.toString(),
+                                a.name.toString(),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -87,6 +106,7 @@ class SelectApp extends StatelessWidget implements WinterView {
                         value: _model.editSelectedApps.apps.contains(
                           a.packageName.toString(),
                         ),
+
                         onChanged: (aa) {
                           // print(_model.editSelectedApps.apps.toString());
                           if (aa ?? false) {
@@ -96,6 +116,7 @@ class SelectApp extends StatelessWidget implements WinterView {
                           } else {
                             _model.editSelectedApps.apps.remove(a.packageName);
                           }
+
                           setState(() {});
                         },
                       ),

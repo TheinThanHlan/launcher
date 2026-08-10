@@ -11,8 +11,9 @@ class HomeController implements WinterController {
    //this._view.c=this;
   void reset(){}
 
+  @override
   WinterView getView(){
-    return this._view;
+    return _view;
   }
 
 }

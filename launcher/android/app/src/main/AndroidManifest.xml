@@ -2,7 +2,10 @@
   <application
     android:label="launcher"
     android:name="${applicationName}"
-    android:icon="@mipmap/ic_launcher">
+    android:icon="@mipmap/ic_launcher"
+    android:enableOnBackInvokedCallback="true"
+  >
+
     <activity
       android:name=".MainActivity"
       android:exported="true"
@@ -44,4 +47,6 @@
       <data android:mimeType="text/plain" />
     </intent>
   </queries>
+  <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 </manifest>

@@ -6,5 +6,5 @@
 
 ## Features 
   - [x] show only selected apps
-  - [ ] delete multiple apps
+  - [x] delete multiple apps
   

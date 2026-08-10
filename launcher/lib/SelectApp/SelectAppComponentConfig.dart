@@ -12,6 +12,7 @@ class SelectAppComponentConfig implements Configurer {
   //please write sub component configurations here
   Future<void> _preConfig() async {}
 
+  @override
   Future<void> config() async {
     await _preConfig();
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:launcher/Home/HomeController.dart';
-import 'package:launcher/data/dao/SelectedAppsDao.dart';
 import 'ApplicationConfig.dart';
 import 'package:winter/winter.dart';
 

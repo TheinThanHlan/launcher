@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_device_apps/flutter_device_apps.dart';
 import 'package:launcher/Home/HomeComponentConfig.dart';
 import 'package:launcher/SelectApp/SelectAppComponentConfig.dart';
+import 'package:launcher/data/service/AppInfoService.dart';
+import 'package:launcher/data/service/ServiceConfig.dart';
 import 'package:winter/winter.dart';
 import './data/dao/DaoConfig.dart';
 
@@ -15,16 +16,13 @@ class ApplicationConfig implements Configurer {
     );
 
     await DaoConfig().config();
-    getIt.registerSingleton(
-      ValueNotifier(
-        (await FlutterDeviceApps.listApps(
-          includeSystem: true,
-          includeIcons: true,
-        )).toList()..sort((a, b) {
-          return a.appName.toString().compareTo(b.appName.toString());
-        }),
-      ),
-    );
+    await ServiceConfig().config();
+
+    //run before application start to inject app info notifier
+    await getIt<AppInfoService>().updateAppInfosNotifier();
+
+    //app change listener use too much resource and I will comment ths util I found better solution
+    //getIt<AppInfoService>().listenToTheAppChange();
     HomeComponentConfig().config();
     SelectAppComponentConfig().config();
   }
