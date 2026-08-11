@@ -43,6 +43,8 @@ dependencies:
       ref: master
   path_provider: ^2.1.6
   installed_apps: ^2.1.1
+  flutter_svg: ^2.3.0
+  flutter_soloud: ^4.1.7
   #nativeapi: ^0.1.4
 
 dev_dependencies:
@@ -73,7 +75,8 @@ flutter:
   #assets:
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
-
+  assets:
+    - lib/resources/
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
 

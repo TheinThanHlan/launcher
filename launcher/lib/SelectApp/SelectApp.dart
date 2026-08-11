@@ -59,6 +59,7 @@ class SelectApp extends StatelessWidget implements WinterView {
                       child: Text(_model.actionButtonTitle),
                     ),
                   ),
+                  Chip(label: Text("${_model.editSelectedApps.apps.length}")),
                   Checkbox(
                     value: isAllSelected(filteredValue),
                     onChanged: (a) {
@@ -76,51 +77,56 @@ class SelectApp extends StatelessWidget implements WinterView {
               ),
               body: Padding(
                 padding: EdgeInsetsGeometry.symmetric(vertical: 13),
-                child: ListView(
-                  children: [
-                    for (var a in filteredValue)
-                      CheckboxListTile(
-                        //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
-                        title: Row(
-                          spacing: 34,
-                          children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: Image.memory(
-                                a.icon ?? Uint8List(1),
-                                width: 55,
-                                fit: BoxFit.contain,
-                              ),
-                              onLongPress: () {
-                                InstalledApps.startApp(a.packageName);
-                              },
-                            ),
-                            Expanded(
-                              child: Text(
-                                a.name.toString(),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        value: _model.editSelectedApps.apps.contains(
-                          a.packageName.toString(),
-                        ),
+                child: ListView.builder(
+                  itemCount: filteredValue.length,
 
-                        onChanged: (aa) {
-                          // print(_model.editSelectedApps.apps.toString());
-                          if (aa ?? false) {
-                            _model.editSelectedApps.apps.add(
-                              a.packageName.toString(),
-                            );
-                          } else {
-                            _model.editSelectedApps.apps.remove(a.packageName);
-                          }
-
-                          setState(() {});
-                        },
+                  itemBuilder: (context, index) {
+                    return CheckboxListTile(
+                      //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
+                      title: Row(
+                        spacing: 34,
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: Image.memory(
+                              filteredValue[index].icon ?? Uint8List(1),
+                              width: 55,
+                              fit: BoxFit.contain,
+                            ),
+                            onLongPress: () {
+                              InstalledApps.startApp(
+                                filteredValue[index].packageName,
+                              );
+                            },
+                          ),
+                          Expanded(
+                            child: Text(
+                              filteredValue[index].name.toString(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                  ],
+                      value: _model.editSelectedApps.apps.contains(
+                        filteredValue[index].packageName.toString(),
+                      ),
+
+                      onChanged: (aa) {
+                        // print(_model.editSelectedApps.apps.toString());
+                        if (aa ?? false) {
+                          _model.editSelectedApps.apps.add(
+                            filteredValue[index].packageName.toString(),
+                          );
+                        } else {
+                          _model.editSelectedApps.apps.remove(
+                            filteredValue[index].packageName,
+                          );
+                        }
+
+                        setState(() {});
+                      },
+                    );
+                  },
                 ),
               ),
             );

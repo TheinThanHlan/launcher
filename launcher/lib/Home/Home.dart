@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_soloud/flutter_soloud.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
 import 'package:launcher/SelectApp/SelectAppController.dart';
@@ -50,7 +53,34 @@ class Home extends StatelessWidget implements WinterView {
                       childAspectRatio: 0.9,
                       children: [
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            getIt<SoLoud>().play(
+                              getIt<AudioSource>(instanceName: "pop_sound"),
+                            );
+                          },
+
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            spacing: 13,
+                            children: [
+                              SvgPicture.asset(
+                                "lib/resources/bubble-3-svgrepo-com.svg",
+                                width: 34,
+                                height: 34,
+                              ),
+                              Text(
+                                "Pop bubble",
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
@@ -90,7 +120,7 @@ class Home extends StatelessWidget implements WinterView {
                           ),
                         ),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
@@ -127,7 +157,10 @@ class Home extends StatelessWidget implements WinterView {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             spacing: 13,
                             children: [
-                              CircleAvatar(radius: 21, child: Icon(Icons.apps)),
+                              CircleAvatar(
+                                radius: 21,
+                                child: Icon(Icons.delete),
+                              ),
                               Text(
                                 "Delete Apps",
                                 maxLines: 2,
@@ -141,7 +174,7 @@ class Home extends StatelessWidget implements WinterView {
                         for (var a in value)
                           if (snapshot.data!.apps.contains(a.packageName))
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 InstalledApps.startApp(a.packageName);
                               },
                               child: Column(
