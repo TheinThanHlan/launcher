@@ -20,6 +20,6 @@ class SelectAppModel implements WinterModel {
     required this.includeSystemApps,
     required this.onlyLaunchable,
   }) {
-    editSelectedApps.apps = [...selectedApps.apps];
+    editSelectedApps.apps = List.of(selectedApps.apps);
   }
 }
