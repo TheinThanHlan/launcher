@@ -13,8 +13,6 @@ class SelectAppModel implements WinterModel {
   final SelectedApps editSelectedApps = SelectedApps([]);
   final FutureOr<void> Function(SelectedApps selectedApps) onActionClicked;
 
-  final ValueNotifier<String> searchApp = ValueNotifier("");
-
   SelectAppModel({
     required this.pageTitle,
     required this.actionButtonTitle,
