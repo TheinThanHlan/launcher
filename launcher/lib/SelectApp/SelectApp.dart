@@ -22,6 +22,7 @@ class SelectApp extends StatelessWidget implements WinterView {
       valueListenable: getIt<ValueNotifier<List<AppInfo>>>(),
       builder: (builder, value, child) {
         //filter the system apps and launchable apps.
+        var search_text_controller = TextEditingController();
         var filteredValue = value;
         if (!_model.includeSystemApps) {
           filteredValue = filteredValue
@@ -75,59 +76,97 @@ class SelectApp extends StatelessWidget implements WinterView {
                   ),
                 ],
               ),
-              body: Padding(
-                padding: EdgeInsetsGeometry.symmetric(vertical: 13),
-                child: ListView.builder(
-                  itemCount: filteredValue.length,
-
-                  itemBuilder: (context, index) {
-                    return CheckboxListTile(
-                      //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
-                      title: Row(
-                        spacing: 34,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Image.memory(
-                              filteredValue[index].icon ?? Uint8List(1),
-                              width: 55,
-                              fit: BoxFit.contain,
-                            ),
-                            onLongPress: () {
-                              InstalledApps.startApp(
-                                filteredValue[index].packageName,
-                              );
-                            },
-                          ),
-                          Expanded(
-                            child: Text(
-                              filteredValue[index].name.toString(),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      value: _model.editSelectedApps.apps.contains(
-                        filteredValue[index].packageName.toString(),
+              body: Column(
+                children: [
+                  Container(
+                    height: 89,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: 21),
+                    child: TextField(
+                      controller: search_text_controller,
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            _model.searchApp.value = "";
+                            search_text_controller.clear();
+                          },
+                          icon: Icon(Icons.cancel),
+                        ),
                       ),
 
-                      onChanged: (aa) {
-                        // print(_model.editSelectedApps.apps.toString());
-                        if (aa ?? false) {
-                          _model.editSelectedApps.apps.add(
-                            filteredValue[index].packageName.toString(),
-                          );
-                        } else {
-                          _model.editSelectedApps.apps.remove(
-                            filteredValue[index].packageName,
-                          );
-                        }
-
-                        setState(() {});
+                      onChanged: (a) {
+                        _model.searchApp.value = a;
                       },
-                    );
-                  },
-                ),
+                      onTapOutside: (event) {
+                        FocusScope.of(
+                          context,
+                        ).unfocus(); // Removes focus when tapping outside this field
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 13),
+                      child: ValueListenableBuilder(
+                        valueListenable: _model.searchApp,
+                        builder: (context, value, child) {
+                          return ListView(
+                            children: [
+                              for (var a in filteredValue)
+                                if (a.name.toLowerCase().contains(
+                                  value.toLowerCase(),
+                                ))
+                                  CheckboxListTile(
+                                    //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
+                                    title: Row(
+                                      spacing: 34,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: Image.memory(
+                                            a.icon ?? Uint8List(1),
+                                            width: 55,
+                                            fit: BoxFit.contain,
+                                          ),
+                                          onLongPress: () {
+                                            InstalledApps.startApp(
+                                              a.packageName,
+                                            );
+                                          },
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            a.name.toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    value: _model.editSelectedApps.apps
+                                        .contains(a.packageName.toString()),
+
+                                    onChanged: (aa) {
+                                      // print(_model.editSelectedApps.apps.toString());
+                                      if (aa ?? false) {
+                                        _model.editSelectedApps.apps.add(
+                                          a.packageName.toString(),
+                                        );
+                                      } else {
+                                        _model.editSelectedApps.apps.remove(
+                                          a.packageName,
+                                        );
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           },

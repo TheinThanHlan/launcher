@@ -7,6 +7,7 @@ void main() {
   ApplicationConfig().config().then((a) {
     runApp(
       MaterialApp(
+        theme: ThemeData(useMaterial3: true),
         color: Colors.transparent,
         home: ValueListenableBuilder(
           valueListenable: getIt<ValueNotifier<String>>(

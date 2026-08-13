@@ -59,24 +59,28 @@ class Home extends StatelessWidget implements WinterView {
                             );
                           },
 
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            spacing: 13,
-                            children: [
-                              SvgPicture.asset(
-                                "lib/resources/bubble-3-svgrepo-com.svg",
-                                width: 34,
-                                height: 34,
-                              ),
-                              Text(
-                                "Pop bubble",
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          child: Container(
+                            padding: EdgeInsets.only(top: 8),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              spacing: 13,
+                              children: [
+                                SvgPicture.asset(
+                                  "lib/resources/bubble-3-svgrepo-com.svg",
+                                  width: 34,
+                                  height: 34,
+                                ),
+                                Text(
+                                  "Pop bubble",
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         InkWell(
@@ -103,20 +107,27 @@ class Home extends StatelessWidget implements WinterView {
                               ),
                             );
                           },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            spacing: 13,
-                            children: [
-                              CircleAvatar(radius: 21, child: Icon(Icons.apps)),
-                              Text(
-                                "Show App Chooser",
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          child: Container(
+                            padding: EdgeInsets.only(top: 8),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              spacing: 13,
+                              children: [
+                                CircleAvatar(
+                                  radius: 21,
+                                  child: Icon(Icons.apps),
+                                ),
+                                Text(
+                                  "Show App Chooser",
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         InkWell(
@@ -152,23 +163,27 @@ class Home extends StatelessWidget implements WinterView {
                               ),
                             );
                           },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            spacing: 13,
-                            children: [
-                              CircleAvatar(
-                                radius: 21,
-                                child: Icon(Icons.delete),
-                              ),
-                              Text(
-                                "Delete Apps",
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                          child: Container(
+                            padding: EdgeInsets.only(top: 8),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              spacing: 13,
+                              children: [
+                                CircleAvatar(
+                                  radius: 21,
+                                  child: Icon(Icons.delete),
+                                ),
+                                Text(
+                                  "Delete Apps",
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         for (var a in value)
@@ -177,23 +192,29 @@ class Home extends StatelessWidget implements WinterView {
                               onTap: () async {
                                 InstalledApps.startApp(a.packageName);
                               },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                spacing: 8,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 21,
-                                    child: Image.memory(a.icon ?? Uint8List(0)),
-                                  ),
-                                  Text(
-                                    a.name,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
+                              child: Container(
+                                padding: EdgeInsets.only(top: 8),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  spacing: 8,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 21,
+                                      child: Image.memory(
+                                        a.icon ?? Uint8List(0),
+                                      ),
+                                    ),
+                                    Text(
+                                      a.name,
+                                      maxLines: 2,
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                       ],

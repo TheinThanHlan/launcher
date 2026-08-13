@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:launcher/data/model/SelectedApps.dart';
 import 'package:winter/winter.dart';
 
@@ -11,6 +12,8 @@ class SelectAppModel implements WinterModel {
   final bool onlyLaunchable;
   final SelectedApps editSelectedApps = SelectedApps([]);
   final FutureOr<void> Function(SelectedApps selectedApps) onActionClicked;
+
+  final ValueNotifier<String> searchApp = ValueNotifier("");
 
   SelectAppModel({
     required this.pageTitle,
