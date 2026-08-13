@@ -1,9 +1,5 @@
-import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_soloud/flutter_soloud.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
 import 'package:launcher/SelectApp/SelectAppController.dart';
@@ -52,37 +48,6 @@ class Home extends StatelessWidget implements WinterView {
                       semanticChildCount: snapshot.data!.apps.length,
                       childAspectRatio: 0.9,
                       children: [
-                        InkWell(
-                          onTap: () async {
-                            getIt<SoLoud>().play(
-                              getIt<AudioSource>(instanceName: "pop_sound"),
-                            );
-                          },
-
-                          child: Container(
-                            padding: EdgeInsets.only(top: 8),
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              spacing: 13,
-                              children: [
-                                SvgPicture.asset(
-                                  "lib/resources/bubble-3-svgrepo-com.svg",
-                                  width: 34,
-                                  height: 34,
-                                ),
-                                Text(
-                                  "Pop bubble",
-                                  maxLines: 2,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                         InkWell(
                           onTap: () async {
                             Navigator.of(context).push(

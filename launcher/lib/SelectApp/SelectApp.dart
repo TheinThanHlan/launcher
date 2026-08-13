@@ -23,20 +23,27 @@ class SelectApp extends StatelessWidget implements WinterView {
       builder: (builder, value, child) {
         //filter the system apps and launchable apps.
         var search_text_controller = TextEditingController();
-        var filteredValue = value;
-        if (!_model.includeSystemApps) {
-          filteredValue = filteredValue
-              .where((a) => a.isSystemApp != true)
-              .toList();
-        }
-        if (_model.onlyLaunchable) {
-          filteredValue = filteredValue
-              .where((a) => a.isLaunchableApp == true)
-              .toList();
-        }
 
         return StatefulBuilder(
           builder: (context, setState) {
+            var filteredValue = value;
+            if (!_model.includeSystemApps) {
+              filteredValue = filteredValue
+                  .where((a) => a.isSystemApp != true)
+                  .toList();
+            }
+            if (_model.onlyLaunchable) {
+              filteredValue = filteredValue
+                  .where((a) => a.isLaunchableApp == true)
+                  .toList();
+            }
+            filteredValue = filteredValue
+                .where(
+                  (a) => a.name.toLowerCase().contains(
+                    search_text_controller.text.toLowerCase(),
+                  ),
+                )
+                .toList();
             return Scaffold(
               appBar: AppBar(
                 title: Text(_model.pageTitle),
@@ -88,15 +95,15 @@ class SelectApp extends StatelessWidget implements WinterView {
                         hintText: "Search",
                         suffixIcon: IconButton(
                           onPressed: () {
-                            _model.searchApp.value = "";
-                            search_text_controller.clear();
+                            setState(() {
+                              search_text_controller.text = "";
+                            });
                           },
                           icon: Icon(Icons.cancel),
                         ),
                       ),
-
                       onChanged: (a) {
-                        _model.searchApp.value = a;
+                        setState(() {});
                       },
                       onTapOutside: (event) {
                         FocusScope.of(
@@ -108,61 +115,52 @@ class SelectApp extends StatelessWidget implements WinterView {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsetsGeometry.symmetric(vertical: 13),
-                      child: ValueListenableBuilder(
-                        valueListenable: _model.searchApp,
-                        builder: (context, value, child) {
-                          return ListView(
-                            children: [
-                              for (var a in filteredValue)
-                                if (a.name.toLowerCase().contains(
-                                  value.toLowerCase(),
-                                ))
-                                  CheckboxListTile(
-                                    //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
-                                    title: Row(
-                                      spacing: 34,
-                                      children: [
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: Image.memory(
-                                            a.icon ?? Uint8List(1),
-                                            width: 55,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          onLongPress: () {
-                                            InstalledApps.startApp(
-                                              a.packageName,
-                                            );
-                                          },
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            a.name.toString(),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
+                      child: ListView(
+                        children: [
+                          for (var a in filteredValue)
+                            CheckboxListTile(
+                              //leading: Image.memory(a.iconBytes ?? [] as Uint8List),
+                              title: Row(
+                                spacing: 34,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Image.memory(
+                                      a.icon ?? Uint8List(1),
+                                      width: 55,
+                                      fit: BoxFit.contain,
                                     ),
-                                    value: _model.editSelectedApps.apps
-                                        .contains(a.packageName.toString()),
-
-                                    onChanged: (aa) {
-                                      // print(_model.editSelectedApps.apps.toString());
-                                      if (aa ?? false) {
-                                        _model.editSelectedApps.apps.add(
-                                          a.packageName.toString(),
-                                        );
-                                      } else {
-                                        _model.editSelectedApps.apps.remove(
-                                          a.packageName,
-                                        );
-                                      }
-                                      setState(() {});
+                                    onLongPress: () {
+                                      InstalledApps.startApp(a.packageName);
                                     },
                                   ),
-                            ],
-                          );
-                        },
+                                  Expanded(
+                                    child: Text(
+                                      a.name.toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              value: _model.editSelectedApps.apps.contains(
+                                a.packageName.toString(),
+                              ),
+
+                              onChanged: (aa) {
+                                // print(_model.editSelectedApps.apps.toString());
+                                if (aa ?? false) {
+                                  _model.editSelectedApps.apps.add(
+                                    a.packageName.toString(),
+                                  );
+                                } else {
+                                  _model.editSelectedApps.apps.remove(
+                                    a.packageName,
+                                  );
+                                }
+                                setState(() {});
+                              },
+                            ),
+                        ],
                       ),
                     ),
                   ),
